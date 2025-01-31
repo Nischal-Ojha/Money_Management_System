@@ -1,69 +1,10 @@
 "use client"
 
 import React, { useState } from 'react'
-
-// import React from "react"
 import { Plus } from 'lucide-react';
 import Link from "next/link";
 
 const NewTransaction = () => {
-  // // State for form data
-  // const [name, setName] = useState<string>("")
-  // const [email, setEmail] = useState<string>("")
-  
-  // // Handler for form submission
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  
-  //   // Example of what you could do with the form data, e.g., sending it to an API
-  //   const formData = { name, email };
-  
-  //   try {
-  //     const res = await fetch('/api/form-action', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(formData),
-  //     });
-  
-  //     if (res.ok) {
-  //       console.log('Form submitted successfully!');
-  //     } else {
-  //       console.error('Error submitting form');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error submitting form:', error);
-  //   }
-  // };
-
-  // const [transactionTypes, setTransactionTypes] = useState<{
-  //   income: boolean;
-  //   expense: boolean;
-  //   lent: boolean;
-  //   borrow: boolean;
-  // }>({
-  //   income: false,
-  //   expense: false,
-  //   lent: false,
-  //   borrow: false,
-  // });
-
-  // // Handler to update state when a checkbox is toggled
-  // const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, checked } = event.target;
-  //   setTransactionTypes((prevState) => ({
-  //     ...prevState,
-  //     [name]: checked,
-  //   }));
-  // };
-
-  // // Form submission logic (example)
-  // const handleSubmit = (event: React.FormEvent) => {
-  //   event.preventDefault();
-  //   console.log('Selected transaction types:', transactionTypes);
-  //   // Here you can handle form submission (e.g., save to a database or send to an API)
-  // };
 
   const [transactionType, setTransactionType] = useState<string>('');
 
@@ -76,6 +17,24 @@ const NewTransaction = () => {
   const handleAmountChange = (cost:string)=>{
     const value = Number(cost)
     setAmount(value)
+  }
+
+  const[userName, setUserName] = useState<string>("")
+
+  const handleUserChange = (name:string)=>{
+    setUserName(name)
+  }
+
+  const [accountType, setAccountType] = useState<string>("")
+
+  const accountHandleChange = (account:string)=>{
+    setAccountType(account)
+  }
+
+  const [details, setDetails] = useState<string>("")
+
+  const handleDetailsChange=(value:string)=>{
+    setDetails(value)
   }
 
   return (
@@ -92,7 +51,7 @@ const NewTransaction = () => {
       </div>
       <div className="">
         <form className="">
-          <div className="border flex items-center justify-between p-4 rounded-lg max-w-md">
+          <div className="border flex items-center justify-between p-4 rounded-lg max-w-xl">
             <p className="font-medium">Type of transaction:</p>
             <div className="flex gap-6">
               <div className="flex items-center gap-2">
@@ -123,13 +82,72 @@ const NewTransaction = () => {
                   Expense
                 </label>
               </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  id="lent"
+                  name="transactionType"
+                  value="lent"
+                  checked={transactionType === 'lent'}
+                  onChange={() => handleTypeChange('lent')}
+                  className="h-4 w-4"
+                />
+                <label htmlFor="lent" className="text-sm">
+                  Lent
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  id="borrow"
+                  name="transactionType"
+                  value="borrow"
+                  checked={transactionType === 'borrow'}
+                  onChange={() => handleTypeChange('borrow')}
+                  className="h-4 w-4"
+                />
+                <label htmlFor="borrow" className="text-sm">
+                  Borrow
+                </label>
+              </div>
             </div>
           </div>
-          <div className='border flex items-center p-4 my-8 gap-4 rounded-lg max-w-md'>
-            <label htmlFor="amount" >Amount</label>
-            <input type="text" id='amount' name='amount' value={amount} onChange={(e)=>handleAmountChange(e.target.value)} className='bg-gray-700 p-2 rounded-lg text-white w-full outline-none'/>
+          <div className='flex justify-between'>
+            <div className='border flex items-center p-4 my-8 justify-between rounded-lg w-[36rem]'>
+              <label htmlFor="amount" >Amount</label>
+              <input type="text" id='amount' name='amount' value={amount} onChange={(e)=>handleAmountChange(e.target.value)} className='bg-gray-700 p-2 rounded-lg text-white w-full outline-none max-w-md'/>
+            </div>
+            <div className={`border ${(transactionType==="lent"||transactionType==="borrow")?`flex items-center p-4 my-8 justify-between rounded-lg w-[36rem]`:"hidden"}  `}>
+                <label htmlFor="user">User</label>
+                <input type="text" id='user' name='user' value={userName} onChange={(e)=>{handleUserChange(e.target.value)}}  className='bg-gray-700 p-2 rounded-lg text-white w-full outline-none max-w-md'/>
+            </div>
           </div>
-          
+          <div className='border rounded-lg flex items-center justify-between p-4 max-w-xl '>
+            <p className='mr-14'>Account Type:</p>
+            <div className='flex items-center gap-2'>
+              <input type="radio" id='cash' name='account' value="cash" checked={accountType==="cash"} onChange={()=>{accountHandleChange("cash")}}/>
+              <label htmlFor="cash">Cash</label>
+            </div>
+            <div className={`${(accountType==="online"|| accountType ==="bank" || accountType === "khalti")?"hidden":'flex items-center gap-2'}`}>
+              <input type="radio" id='online' name='account' value="online" checked={accountType==="online"} onChange={()=>{accountHandleChange("online")}}/>
+              <label htmlFor="online">Online</label>
+            </div>
+            <div className={`${(accountType==="online"|| accountType ==="bank" || accountType === "khalti")?"flex gap-16":"hidden"}`}>
+              <div className='flex items-center gap-2'>
+                <input type="radio" id='bank' name='account' value="bank" checked={accountType==="bank"} onChange={()=>{accountHandleChange("bank")}}/>
+                <label htmlFor="bank">Bank</label>
+              </div>
+              <div className='flex items-center gap-2'>
+                <input type="radio" id='khalti' name='account' value="khalti  " checked={accountType==="khalti"} onChange={()=>{accountHandleChange("khalti")}}/>
+                <label htmlFor="khalti">Khalti</label>
+              </div>
+            </div>
+          </div>
+          <div className='border rounded-lg flex items-center justify-between p-4 max-w-xl my-8'>
+            <label htmlFor="Details">Details:</label>
+            <input type="text" name='details' id='details' value={details} onChange={(e)=>handleDetailsChange(e.target.value)} className='bg-gray-700 p-2 rounded-lg text-white w-full outline-none max-w-md'/>
+          </div>
+          <button className='border rounded-lg p-4'>Submit</button>
         </form>
       </div>
     </div>
