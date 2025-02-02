@@ -18,24 +18,35 @@ const HistoryBox = () => {
 
   },[])
 
+  const data = [
+    { id: 1, Date:formatter.format(date), Detail: "John Doe was given 100 from bank account", UserName:"John Doe" ,Amount: 100, Account:"Bank", Type:"Expense" },
+    { id: 2, Date:formatter.format(date), Detail: "Jane Smith gave 200 into my khalti account", UserName:"Jane Smith",Amount: 200, Account:"Khalti", Type:"Income" },
+    { id: 3, Date:formatter.format(date), Detail: "Spent 100 for breakfast", UserName:"",Amount: 100, Account:"Cash", Type:"Expense" },
+    { id: 4, Date:formatter.format(date), Detail: "Got 10000 from father in bank account", UserName:"",Amount: 10000, Account:"Bank" , Type:"Income"},
+  ];
+
   return (
     <div className='border'>
-      <table className='border w-full'>
+      <table className='min-w-full bg-black border border-gray-300'>
         <thead>
-            <tr className='border'>
-                <th className='border p-4 min-w-56'>Date</th>
+            <tr className='"bg-black text-white'>
+                <th className='border p-4 min-w-56 py-2 px-4 '>Date</th>
                 <th className='border p-4 min-w-56'>Detail</th>
+                <th className='border p-4 min-w-56'>UserName</th>
                 <th className='border p-4 min-w-56'>Amount</th>
                 <th className='border p-4 min-w-56'>Account</th>
             </tr>
         </thead>
         <tbody>
-            <tr className='border text-center'>
-                <td className='border p-4'>{formatter.format(date)}</td>
-                <td className='border p-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur molestiae praesentium asperiores natus suscipit soluta doloremque odio, veritatis at distinctio quidem nisi </td>
-                <td className='border p-4'>6000</td>
-                <td className='border p-4'>Bank</td>
+        {data.map((item, index) => (
+            <tr key={item.id} className={`${index % 2 === 0 ? "bg-gray-900" : "bg-gray-800"} ${item.Type==="Income"?"text-green-600":"text-red-600"} hover:bg-gray-500`} >
+              <td className="py-2 px-4 border text-center">{item.Date}</td>
+              <td className="py-2 px-4 border text-center">{item.Detail}</td>
+              <td className="py-2 px-4 border text-center">{item.UserName}</td>
+              <td className="py-2 px-4 border text-center">Rs.{item.Amount}</td>
+              <td className="py-2 px-4 border text-center">{item.Account}</td>
             </tr>
+          ))}
         </tbody>
       </table>
     </div>

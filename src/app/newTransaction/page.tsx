@@ -5,6 +5,7 @@ import { Plus, Minus } from 'lucide-react';
 import Link from "next/link";
 import CheckBoxContainer from '../../components/CheckBoxContainer';
 import HistoryBox from '../../components/HistoryBox';
+import axios from 'axios';
 
 const NewTransaction = () => {
 
@@ -28,7 +29,7 @@ const NewTransaction = () => {
     details: false
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors = {
@@ -53,6 +54,14 @@ const NewTransaction = () => {
       accountType,
       details
     });
+
+    try{
+      const response = await axios.post("/api/transaction", {transactionType, amount, userName, details, accountType})
+      console.log(response)
+    }catch(error:unknown){
+      if (error instanceof Error) throw new Error(`While api response: ${error.message}`)
+      else throw new Error("Something went wrong while api response")
+    }
 
     setAddNew(false)
     setTransactionType("");setAmount("");setUserName("");setDetails("");setAccountType("");
