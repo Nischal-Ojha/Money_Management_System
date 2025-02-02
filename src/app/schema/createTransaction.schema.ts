@@ -7,7 +7,6 @@ export const createTransactionSchema =z.object({
         accountType:z.string({required_error:"Account Type is required"}),
         details:z.string({required_error:"Details is required"}),
         userName:z.string(),
-        // dateOfTransaciton:z.string()
     }).refine((data)=>data.transactionType==="Lent"|| data.transactionType==="Borrow" && !data.userName, {message:"User Name is required", path:["userName"]})
 })
 

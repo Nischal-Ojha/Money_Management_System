@@ -19,10 +19,6 @@ export async function POST(request){
 
 export async function GET(){
     try{
-        // await connection()
-        // const transactionsData = Transaction.find().lean()
-        // console.log(transactionsData)
-        // return NextResponse.json(transactionsData)
         return NextResponse.json("hello")
     }catch(error:unknown){
         if (error instanceof Error) throw new Error(`In routes:${error.message}`)

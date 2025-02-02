@@ -17,10 +17,6 @@ const NewTransaction = () => {
   const [details, setDetails] = useState<string>("")
 
 
-  // const handleSubmit = ()=>{
-
-  // }
-
   const [errors, setErrors] = useState({
     transactionType: false,
     amount: false,
