@@ -9,6 +9,7 @@ import { createUserSchema } from "../schema/user.schema";
 import User  from "../models/users.models";
 
 const routes=(app:Express)=>{
+    logger.info("Inside routes")
     app.get("/api/transactionHistory", async(req, res)=>{
         try{
             logger.info("Getting Datas from Database")
@@ -27,7 +28,7 @@ const routes=(app:Express)=>{
 
     app.post("/api/users", validate(createUserSchema), createUserHandler)
 
-    app.get("/", (req, res)=>{res.send("Hello Users")})
+    app.get("/", (req, res)=>{logger.info("hello world"); res.send("Hello Users")})
 
 }
 
