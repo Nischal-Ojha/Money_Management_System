@@ -27,6 +27,8 @@ const routes=(app:Express)=>{
 
     app.post("/api/users", validate(createUserSchema), createUserHandler)
 
+    app.get("/", (req, res)=>{res.send("Hello Users")})
+
 }
 
 export default routes
