@@ -37,5 +37,6 @@ const routes = (app) => {
     app.post("/api/newTransaction", (0, validate_1.default)(transaction_schema_1.createTransactionSchema), transaction_controller_1.createTransactionHandler);
     app.get("/api/users", user_controller_1.getUserHandler);
     app.post("/api/users", (0, validate_1.default)(user_schema_1.createUserSchema), user_controller_1.createUserHandler);
+    app.get("/", (req, res) => { res.send("Hello Users"); });
 };
 exports.default = routes;
