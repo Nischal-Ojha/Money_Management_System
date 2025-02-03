@@ -8,7 +8,7 @@ import connectionToDB from "./utilis/connect";
 const app = express()
 app.use(express.json())
 
-const port = config.get("port")
+const port = process.env.port ||config.get("port")
 
 app.listen(port, async()=>{
     logger.info(`Listening to the port:${port}`)
