@@ -12,7 +12,7 @@ interface datas  {
 }
 
 interface HistoryBoxProps {
-  datas:datas[]
+  datas?:datas[]
 }
 
 
