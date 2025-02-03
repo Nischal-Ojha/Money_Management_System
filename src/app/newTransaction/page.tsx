@@ -5,7 +5,15 @@ import { Plus, Minus } from 'lucide-react';
 import Link from "next/link";
 import CheckBoxContainer from '../../components/CheckBoxContainer';
 import HistoryBox from '../../components/HistoryBox';
-import axios from 'axios';
+// import axios from 'axios';
+
+interface Transaction {
+  transactionType: string;
+  amount: number;
+  accountType: string;
+  details: string;
+  userName?: string;
+}
 
 const NewTransaction = () => {
 
@@ -15,7 +23,9 @@ const NewTransaction = () => {
   const [userName, setUserName] = useState<string>("")
   const [accountType, setAccountType] = useState<string>("")
   const [details, setDetails] = useState<string>("")
+  const [showOthers, setShowOthers] = useState<boolean>(false)
 
+  const [arrayHistory, setArrayHistory] = useState<Transaction[]>([])
 
   const [errors, setErrors] = useState({
     transactionType: false,
@@ -25,13 +35,28 @@ const NewTransaction = () => {
     details: false
   });
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  //   const data = [
+  //   { details: "John Doe was given 100 from bank account", userName:"John Doe" ,amount: 100, accountType:"Bank", transactionType:"Expense" },
+  //   { details: "Jane Smith gave 200 into my khalti account", userName:"Jane Smith",amount: 200, accountType:"Khalti", transactionType:"Income" },
+  //   { details: "Spent 100 for breakfast", userName:"",amount: 100, accountType:"Cash", transactionType:"Expense" },
+  //   { details: "Got 10000 from father in bank account", userName:"",amount: 10000, accountType:"Bank" , transactionType:"Income"},
+  // ];
+
+  const handelTransactionType=(type:string)=>{
+    if(type === "Others") setShowOthers(true)
+    setTransactionType(type)
+  }
+
+  const initialOptions = ["Income", "Expense", "Others"]
+  const otherOptions = ["Lent", "Borrow", "Payed", "Received"]
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors = {
-      transactionType: transactionType === '',
+      transactionType: transactionType === '' || transactionType === 'Others',
       amount: amount === '' || amount <= 0,
-      userName: (transactionType === "Lent" || transactionType === "Borrow") && userName === "",
+      userName: ["Lent", "Borrow", "Received", "Payed"].includes(transactionType) && userName === "",
       accountType: accountType === "" || accountType ==="Online",
       details: details === ""
     };
@@ -43,25 +68,34 @@ const NewTransaction = () => {
     }
 
     // Handle form submission (send to backend, save in DB, etc.)
-    console.log({
-      transactionType,
-      amount,
-      userName,
-      accountType,
-      details
-    });
+    // console.log({
+    //   transactionType,
+    //   amount,
+    //   userName,
+    //   accountType,
+    //   details
+    // });
 
-    try{
-      const response = await axios.post("/api/transaction", {transactionType, amount, userName, details, accountType})
-      console.log(response)
-    }catch(error:unknown){
-      if (error instanceof Error) throw new Error(`While api response: ${error.message}`)
-      else throw new Error("Something went wrong while api response")
-    }
-
+    setArrayHistory(prev=>[...prev, {transactionType, amount:Number(amount) || 0, userName, details, accountType}])
     setAddNew(false)
+    setShowOthers(false)
     setTransactionType("");setAmount("");setUserName("");setDetails("");setAccountType("");
   };
+
+
+  const handleMainSubmit = async()=>{
+        // Posting on Database.
+        // try{
+        //   const response = await axios.post("/api/transaction", arrayHistory)
+        //   console.log(response)
+        // }catch(error:unknown){
+        //   if (error instanceof Error) throw new Error(`While api response: ${error.message}`)
+        //   else throw new Error("Something went wrong while api response")
+        // }
+        console.log("Posted on Database:")
+        console.log(arrayHistory.map(it=>console.log(it)))
+        console.log(arrayHistory)
+  }
 
   return (
     <div className="min-h-screen p-10 gap-16  font-[family-name:var(--font-geist-sans)]">
@@ -76,7 +110,12 @@ const NewTransaction = () => {
         </div>
       </div>
       <div className={`${addNew?"hidden":""}`}>
-        <HistoryBox />
+        <div className='overflow-auto min-h-[500px]'>
+          <HistoryBox datas={arrayHistory} />
+        </div>
+        <div className={`${arrayHistory.length===0?"hidden":"fixed bottom-0 left-0 w-full py-4 flex justify-center"}`}>
+          <button type='submit' className='p-2 border-[3px] border-purple-900 rounded-lg text-2xl' onClick={handleMainSubmit}>Submit</button>
+        </div>
       </div>
       <div className={`${addNew?"":"hidden"}`}>
         <form onSubmit={handleSubmit} className="">
@@ -84,10 +123,10 @@ const NewTransaction = () => {
           {/* Transaction Type */}
           <div className="border relative flex items-center justify-between p-4 rounded-lg max-w-xl">
             <p className="font-medium">Type of transaction:</p>
-            <div className="flex gap-6">
-              {["Income", "Expense", "Lent", "Borrow"].map(type=>(
+            <div className={`flex items-center ${showOthers?"gap-8":"gap-10"}`}>
+              {(showOthers?otherOptions:initialOptions).map(type=>(
               <div key={type} className="flex items-center gap-2">
-                <input type="radio" id={type} name="transactionType" value={type} checked={transactionType === type} onChange={() => {setTransactionType(type); errors.transactionType=false}} className="h-4 w-4"/>
+                <input type="radio" id={type} name="transactionType" value={type} checked={transactionType === type} onChange={() => {handelTransactionType(type); errors.transactionType=false}} className="h-4 w-4"/>
                 <label htmlFor={type} className="text-sm">{type}</label>
               </div>
               ))
@@ -103,16 +142,16 @@ const NewTransaction = () => {
               <input type="text" id='amount' name='amount' value={amount} onChange={(e)=>{setAmount(Number(e.target.value)); errors.amount=false}} className='bg-gray-700 p-2 rounded-lg text-white w-full outline-none max-w-md'/>
               {errors.amount && <p className="text-red-500 text-sm mt-1 z-10 absolute left-full p-1 ml-2 w-max">Amount is required</p>}
             </div>
-            <div className={`border relative ${(transactionType==="Lent"||transactionType==="Borrow")?`flex items-center p-4 my-8 justify-between rounded-lg w-[36rem]`:"hidden"}  `}>
+            <div className={`border relative ${showOthers?`flex items-center p-4 my-8 justify-between rounded-lg w-[36rem]`:"hidden"}`}>
                 <label htmlFor="user">User</label>
-                <input type="text" id='user' name='user' value={userName} onChange={(e)=>setUserName(e.target.value)}  className='bg-gray-700 p-2 rounded-lg text-white w-full outline-none max-w-md'/>
+                <input type="text" id='user' name='user' value={userName} onChange={(e)=>{setUserName(e.target.value); errors.userName=false}}  className='bg-gray-700 p-2 rounded-lg text-white w-full outline-none max-w-md'/>
                 {errors.userName && <p className="text-red-500 text-sm mt-1 z-10 absolute top-full p-1 w-max">UserName is required</p>}
             </div>
           </div>
 
           {/* Account type */}
           <div className='border relative rounded-lg flex items-center justify-between p-4 max-w-xl '>
-            <p className='mr-14'>Account Type:</p>
+            <p className='mr-14'> Account Type:</p>
             <CheckBoxContainer type='Cash' accountType={accountType} onChange={setAccountType} err={(value)=>setErrors(prev=>({...prev,accountType:value}))} className='flex items-center gap-2 '/>
             <CheckBoxContainer type='Online' accountType={accountType} onChange={setAccountType} err={(value)=>setErrors(prev=>({...prev,accountType:value}))} className={`${(accountType==="Online"|| accountType ==="Bank" || accountType === "Khalti")?"hidden":'flex items-center gap-2'}`}/>
             <div className={`${(accountType==="Online"|| accountType ==="Bank" || accountType === "Khalti")?"flex gap-16":"hidden"}`}>
@@ -122,12 +161,15 @@ const NewTransaction = () => {
             </div>
           {errors.accountType && <p className="text-red-500 text-sm mt-1 z-10 absolute left-full p-1 ml-2 w-max">Account Type is required</p>}
           </div>
-
+          
+          {/* Details */}
           <div className='border relative rounded-lg flex items-center justify-between p-4 max-w-xl my-8'>
             <label htmlFor="Details">Details:</label>
             <input type="text" name='details' id='details' value={details} onChange={(e)=>{setDetails(e.target.value); errors.details=false}} className='bg-gray-700 p-2 rounded-lg text-white w-full outline-none max-w-md'/>
             {errors.details && <p className="text-red-500 text-sm mt-1 z-10 absolute left-full p-1 ml-2 w-max">Details is required</p>}
           </div>
+
+          {/* Submit */}
           <button type='submit' className='border rounded-lg p-4'>Submit</button>
         </form>
       </div>

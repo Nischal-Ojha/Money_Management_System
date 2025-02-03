@@ -21,12 +21,38 @@ export default function Home() {
             <Link className="border p-4 rounded-lg hover:bg-purple-950" href="/historyTransaction">History Transaction</Link>
           </div>
         </div>
-
+        
         <div className="border flex flex-col gap-8 p-4 m-8">
           <p className="text-2xl text-center">Current Status</p>
           <Contains title="Current Balance" containOne="Cash Balance" containTwo="Online Balance"/>
           <Contains title="Secondary Users" containOne="Total Debt remaining" containTwo="Total Credit Remaining"/>
         </div>
+
+        <div className="border flex flex-col gap-8 p-4 m-8">
+          <p className="text-2xl text-center">User Info</p>
+          <div>
+            <table className='min-w-full bg-black border border-gray-300'>
+              <thead>
+                <tr className='"bg-black text-white'>
+                  <th className='border p-4 min-w-56'>Users</th>
+                  <th className='border p-4 min-w-56'>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="bg-gray-900">
+                  <td className="py-2 px-4 border text-center">Anurag</td>
+                  <td className="py-2 px-4 border text-center">300</td>
+                </tr>
+                <tr>
+                  <td className="py-2 px-4 border text-center">Navraj</td>
+                  <td className="py-2 px-4 border text-center">100</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
       </main>
     </div>
   );

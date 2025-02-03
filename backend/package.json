@@ -5,10 +5,11 @@
   "author": "Nischal",
   "license": "ISC",
   "scripts": {
-    "dev":"ts-node-dev --respawn --transpile-only src/app.ts",
-    "build":"tsc"
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "build": "tsc"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "config": "^3.3.12",
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
@@ -20,6 +21,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/body-parser": "^1.19.5",
     "@types/config": "^3.3.5",
     "@types/cors": "^2.8.17",

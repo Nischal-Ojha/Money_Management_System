@@ -2,8 +2,11 @@ import { Express } from "express";
 import Transaction from "../models/transactions.models";
 import logger from "./logger";
 import validate from "../middleware/validate";
-import { createTransactionSchema } from "../schema/createTransaction.schema";
+import { createTransactionSchema } from "../schema/transaction.schema";
 import { createTransactionHandler } from "../controller/transaction.controller";
+import { createUserHandler, getUserHandler} from "../controller/user.controller";
+import { createUserSchema } from "../schema/user.schema";
+import User  from "../models/users.models";
 
 const routes=(app:Express)=>{
     app.get("/api/transactionHistory", async(req, res)=>{
@@ -19,6 +22,11 @@ const routes=(app:Express)=>{
     })
 
     app.post("/api/newTransaction", validate(createTransactionSchema), createTransactionHandler)
+
+    app.get("/api/users", getUserHandler)
+
+    app.post("/api/users", validate(createUserSchema), createUserHandler)
+
 }
 
 export default routes
