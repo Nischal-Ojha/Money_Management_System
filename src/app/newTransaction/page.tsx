@@ -35,13 +35,6 @@ const NewTransaction = () => {
     details: false
   });
 
-  //   const data = [
-  //   { details: "John Doe was given 100 from bank account", userName:"John Doe" ,amount: 100, accountType:"Bank", transactionType:"Expense" },
-  //   { details: "Jane Smith gave 200 into my khalti account", userName:"Jane Smith",amount: 200, accountType:"Khalti", transactionType:"Income" },
-  //   { details: "Spent 100 for breakfast", userName:"",amount: 100, accountType:"Cash", transactionType:"Expense" },
-  //   { details: "Got 10000 from father in bank account", userName:"",amount: 10000, accountType:"Bank" , transactionType:"Income"},
-  // ];
-
   const handelTransactionType=(type:string)=>{
     if(type === "Others") setShowOthers(true)
     setTransactionType(type)
