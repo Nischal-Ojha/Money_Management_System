@@ -76,6 +76,10 @@ const NewTransaction = () => {
     //   details
     // });
 
+    console.log("Posted on Database:")
+    console.log(arrayHistory.map(it=>console.log(it)))
+    console.log(arrayHistory)
+
     setArrayHistory(prev=>[...prev, {transactionType, amount:Number(amount) || 0, userName, details, accountType}])
     setAddNew(false)
     setShowOthers(false)
@@ -83,19 +87,6 @@ const NewTransaction = () => {
   };
 
 
-  const handleMainSubmit = async()=>{
-        // Posting on Database.
-        // try{
-        //   const response = await axios.post("/api/transaction", arrayHistory)
-        //   console.log(response)
-        // }catch(error:unknown){
-        //   if (error instanceof Error) throw new Error(`While api response: ${error.message}`)
-        //   else throw new Error("Something went wrong while api response")
-        // }
-        console.log("Posted on Database:")
-        console.log(arrayHistory.map(it=>console.log(it)))
-        console.log(arrayHistory)
-  }
 
   return (
     <div className="min-h-screen p-10 gap-16  font-[family-name:var(--font-geist-sans)]">
@@ -109,14 +100,13 @@ const NewTransaction = () => {
           <button onClick={()=>setAddNew(!addNew)}>{addNew?<Minus className="hover:text-purple-400 size-9 p-2" />:<Plus className="hover:text-purple-400 size-9 p-2" />}</button>
         </div>
       </div>
+
+      {/* History Box  */}
       <div className={`${addNew?"hidden":""}`}>
-        <div className='overflow-auto min-h-[500px]'>
           <HistoryBox datas={arrayHistory} />
-        </div>
-        <div className={`${arrayHistory.length===0?"hidden":"fixed bottom-0 left-0 w-full py-4 flex justify-center"}`}>
-          <button type='submit' className='p-2 border-[3px] border-purple-900 rounded-lg text-2xl' onClick={handleMainSubmit}>Submit</button>
-        </div>
       </div>
+
+      {/* Add New Transaction */}
       <div className={`${addNew?"":"hidden"}`}>
         <form onSubmit={handleSubmit} className="">
 
