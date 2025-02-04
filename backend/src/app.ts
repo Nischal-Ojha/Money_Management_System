@@ -4,7 +4,6 @@ import routes from "./utilis/routes";
 import logger from "./utilis/logger";
 import connectionToDB from "./utilis/connect";
 
-
 const app = express()
 app.use(express.json())
 

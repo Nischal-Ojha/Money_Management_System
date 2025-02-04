@@ -1,19 +1,12 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Plus, Minus } from 'lucide-react';
 import Link from "next/link";
 import CheckBoxContainer from '../../components/CheckBoxContainer';
-import HistoryBox from '../../components/HistoryBox';
-// import axios from 'axios';
-
-interface Transaction {
-  transactionType: string;
-  amount: number;
-  accountType: string;
-  details: string;
-  userName?: string;
-}
+import HistoryBox from '../../components/todaysHistoryBox';
+import getDatas from '../api/transactionHistory';
+import { datas } from '../../components/todaysHistoryBox';
 
 const NewTransaction = () => {
 
@@ -24,8 +17,8 @@ const NewTransaction = () => {
   const [accountType, setAccountType] = useState<string>("")
   const [details, setDetails] = useState<string>("")
   const [showOthers, setShowOthers] = useState<boolean>(false)
+  const [todayData, SetTodayData] = useState<datas[]>()
 
-  const [arrayHistory, setArrayHistory] = useState<Transaction[]>([])
 
   const [errors, setErrors] = useState({
     transactionType: false,
@@ -40,10 +33,20 @@ const NewTransaction = () => {
     setTransactionType(type)
   }
 
+
+  useEffect(()=>{
+    async function newData(){
+      SetTodayData(await getDatas("today"))
+    }
+    newData()
+  },[addNew]) 
+
+  
+
   const initialOptions = ["Income", "Expense", "Others"]
   const otherOptions = ["Lent", "Borrow", "Payed", "Received"]
-
-  const handleSubmit = (e: React.FormEvent) => {
+  
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors = {
@@ -60,24 +63,38 @@ const NewTransaction = () => {
       return; // Prevent submission if there are errors
     }
 
-    // Handle form submission (send to backend, save in DB, etc.)
-    // console.log({
-    //   transactionType,
-    //   amount,
-    //   userName,
-    //   accountType,
-    //   details
-    // });
 
-    console.log("Posted on Database:")
-    console.log(arrayHistory.map(it=>console.log(it)))
-    console.log(arrayHistory)
+    try{
+      console.log(`${process.env.NEXT_PUBLIC_API_URL}/api/newTransaction`)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/newTransaction`,{
+        method:"POST",
+        headers:{"Content-type":"application/json"},
+        body:JSON.stringify({transactionType, amount, userName:userName, details:userName===""?details:`${details}, ${transactionType}`, accountType})
+      })
 
-    setArrayHistory(prev=>[...prev, {transactionType, amount:Number(amount) || 0, userName, details, accountType}])
+      if (!response.ok) {
+        const responseBody = await response.json();
+        console.error("Error from backend:", responseBody);
+        throw new Error("Failed to send data to the backend");
+      }
+
+      
+      const result = await response.json();
+      console.log("Response from backend", result)
+
+    }catch(error:unknown){
+      if(error instanceof Error) throw new Error(`While fetching: ${error.message}`)
+      else throw new Error("Error occured while fetching")
+    }
+
+     SetTodayData(await getDatas("today"))
+
     setAddNew(false)
     setShowOthers(false)
     setTransactionType("");setAmount("");setUserName("");setDetails("");setAccountType("");
   };
+
+
 
 
 
@@ -96,7 +113,8 @@ const NewTransaction = () => {
 
       {/* History Box  */}
       <div className={`${addNew?"hidden":""}`}>
-          <HistoryBox datas={arrayHistory} />
+        {/* <p>hi</p> */}
+          <HistoryBox datas={todayData} location="today" />
       </div>
 
       {/* Add New Transaction */}

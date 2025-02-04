@@ -3,12 +3,14 @@ import Transaction from "../models/transactions.models";
 import logger from "./logger";
 import validate from "../middleware/validate";
 import { createTransactionSchema } from "../schema/transaction.schema";
-import { createTransactionHandler } from "../controller/transaction.controller";
+import { createTransactionHandler, getTransactionTodayHandler } from "../controller/transaction.controller";
 import { createUserHandler, getUserHandler} from "../controller/user.controller";
 import { createUserSchema } from "../schema/user.schema";
 import User  from "../models/users.models";
+import cors from "cors"
 
 const routes=(app:Express)=>{
+    app.use(cors())
     logger.info("Inside routes")
     app.get("/api/transactionHistory", async(req, res)=>{
         try{
@@ -21,6 +23,8 @@ const routes=(app:Express)=>{
             else throw new Error("Something went wrong whle getting data from database.")
         }
     })
+
+    app.get("/api/transactionToday", getTransactionTodayHandler)
 
     app.post("/api/newTransaction", validate(createTransactionSchema), createTransactionHandler)
 
