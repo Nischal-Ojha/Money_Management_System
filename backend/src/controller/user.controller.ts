@@ -7,7 +7,7 @@ import logger from "../utilis/logger";
 export const getUserHandler= async(req:Request, res:Response)=>{
     try{
         const gotUsers = await getUsers()
-        logger.info(gotUsers)
+        // logger.info(gotUsers)
         res.send(gotUsers)
     }catch(error :unknown){
         if(error instanceof Error) res.status(400).send(`In handler:${error.message}`)
@@ -24,5 +24,15 @@ export const createUserHandler= async(req:Request<unknown, unknown, createUserSc
     }catch(error :unknown){
         if(error instanceof Error) res.status(400).send(`In handler:${error.message}`)
         else res.status(400).send("Something went wrong while getting users.")
+    }
+}
+
+
+export const loggedUserHandler = async(req: Request, res:Response)=>{
+    try{
+        res.status(201).send(req.body)
+    }catch(error){
+        if(error instanceof Error) throw new Error(`In handle:${error.message}`)
+        else throw new Error("Something went wrong while getting logged user.")
     }
 }

@@ -1,6 +1,6 @@
 import Authenticate from '@/components/Authenticate'
 
-const LoginPage = () => {
+const SignUpPage = () => {
 
 
   return (
@@ -14,4 +14,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default SignUpPage

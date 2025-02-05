@@ -12,7 +12,6 @@ const data = [
   ];
 
 const DataBox:React.FC<DataBoxProps>=({title}) => {
-// const DataBox=() => {
   return (
     <div className="overflow-x-auto">
       <p className='text-center text-2xl mb-6 '>{title}</p>

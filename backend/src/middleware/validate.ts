@@ -3,7 +3,7 @@ import { AnyZodObject} from "zod";
 import logger from "../utilis/logger";
 
 const validate=(schema:AnyZodObject)=>(req:Request, res:Response, next:NextFunction)=>{
-    logger.info(`Inside validate:${req.body.amount}`)
+    logger.info(`Inside validate:${req.body}`)
     try{
         schema.parse({
             body:req.body,

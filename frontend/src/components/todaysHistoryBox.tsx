@@ -30,7 +30,7 @@ const HistoryBox:React.FC<HistoryBoxProps> = ({datas = [], location}) => {
         </thead>
         <tbody>
         {datas.map((item, index) => (
-            <tr key={index} className={`${index % 2 === 0 ? "bg-gray-900" : "bg-gray-800"} ${["Income", "Received", "Borrow"].includes(item.transactionType)?"text-green-600":"text-red-600"} hover:bg-gray-500`} >
+            <tr key={index} className={`${index % 2 === 0 ? "bg-gray-900" : "bg-gray-800"} ${["Income", "Received", "Borrow"].includes(item.transactionType)?"text-green-600":"text-red-600"} hover:bg-gray-700`} >
               <td className={`${location==="today"?"hidden":'border p-4 min-w-56 text-center'}`}>{item.updatedAt.split("T")[0]}</td>
               <td className="py-2 px-4 border text-center">{item.details}</td>
               <td className="py-2 px-4 border text-center">{item.userName}</td>

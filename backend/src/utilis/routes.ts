@@ -4,8 +4,8 @@ import logger from "./logger";
 import validate from "../middleware/validate";
 import { createTransactionSchema } from "../schema/transaction.schema";
 import { createTransactionHandler, getTransactionTodayHandler } from "../controller/transaction.controller";
-import { createUserHandler, getUserHandler} from "../controller/user.controller";
-import { createUserSchema } from "../schema/user.schema";
+import { createUserHandler, getUserHandler, loggedUserHandler} from "../controller/user.controller";
+import { createUserSchema, loginUserSchema } from "../schema/user.schema";
 import User  from "../models/users.models";
 import cors from "cors"
 
@@ -31,6 +31,8 @@ const routes=(app:Express)=>{
     app.get("/api/users", getUserHandler)
 
     app.post("/api/users", validate(createUserSchema), createUserHandler)
+
+    app.post("/api/user", validate(loginUserSchema),loggedUserHandler)
 
     app.get("/", (req, res)=>{logger.info("hello world"); res.send("Hello Users")})
 
