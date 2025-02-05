@@ -6,7 +6,7 @@ import connectionToDB from "./utilis/connect";
 import cors from "cors"
 
 const app = express()
-app.use(cors())
+app.use(cors({origin:'*'}))
 app.use(express.json())
 
 const port = process.env.port ||config.get("port")
