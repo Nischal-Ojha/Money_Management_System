@@ -6,7 +6,19 @@ import connectionToDB from "./utilis/connect";
 import cors from "cors"
 
 const app = express()
-app.use(cors({origin:'*'}))
+const allowedOrigins = [
+    'https://money-management-system-qr4p.vercel.app',
+    // Add other origins if needed (e.g., localhost for development)
+  ];
+  
+  app.use(
+    cors({
+      origin: allowedOrigins,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include needed methods
+      allowedHeaders: ['Content-Type', 'Authorization'], // Include needed headers
+      credentials: true, // Enable if using cookies/auth headers
+    })
+  );
 app.use(express.json())
 
 const port = process.env.port ||config.get("port")
