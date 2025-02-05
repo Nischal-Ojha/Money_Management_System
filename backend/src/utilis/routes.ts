@@ -7,10 +7,9 @@ import { createTransactionHandler, getTransactionTodayHandler } from "../control
 import { createUserHandler, getUserHandler, loggedUserHandler} from "../controller/user.controller";
 import { createUserSchema, loginUserSchema } from "../schema/user.schema";
 import User  from "../models/users.models";
-import cors from "cors"
+
 
 const routes=(app:Express)=>{
-    app.use(cors())
     logger.info("Inside routes")
     app.get("/api/transactionHistory", async(req, res)=>{
         try{

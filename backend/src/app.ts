@@ -3,8 +3,10 @@ import config from "config"
 import routes from "./utilis/routes";
 import logger from "./utilis/logger";
 import connectionToDB from "./utilis/connect";
+import cors from "cors"
 
 const app = express()
+app.use(cors())
 app.use(express.json())
 
 const port = process.env.port ||config.get("port")
