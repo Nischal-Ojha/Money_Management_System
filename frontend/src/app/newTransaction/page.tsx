@@ -50,8 +50,8 @@ const NewTransaction = () => {
 
     try{
       console.log(`${process.env.NEXT_PUBLIC_API_URL}api/newTransaction`)
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/newTransaction`,{
-      // const response = await fetch(`http://localhost:3000/api/newTransaction`,{
+      // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/newTransaction`,{
+      const response = await fetch(`http://localhost:3000/api/newTransaction`,{
         method:"POST",
         headers:{"Content-type":"application/json"},
         body:JSON.stringify({transactionType, amount, userName:userName, details:userName===""?details:`${details}, ${transactionType}`, accountType})

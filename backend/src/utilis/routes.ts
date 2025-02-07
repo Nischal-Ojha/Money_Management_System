@@ -6,7 +6,6 @@ import { createTransactionSchema } from "../schema/transaction.schema";
 import { createTransactionHandler, getTransactionTodayHandler } from "../controller/transaction.controller";
 import { createUserHandler, getUserHandler, loggedUserHandler} from "../controller/user.controller";
 import { createUserSchema, loginUserSchema } from "../schema/user.schema";
-import User  from "../models/users.models";
 
 
 const routes=(app:Express)=>{
@@ -14,7 +13,7 @@ const routes=(app:Express)=>{
     app.get("/api/transactionHistory", async(req, res)=>{
         try{
             logger.info("Getting Datas from Database")
-            const datas = await Transaction.find()
+            const datas = await Transaction.find().sort({createdAt:-1})
             res.send(datas)
             logger.info("Successfully Extracted Datas from Database")
         }catch(error:unknown){
