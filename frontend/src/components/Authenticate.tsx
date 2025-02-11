@@ -79,7 +79,7 @@ const Authenticate = ({task}:{task:string}) => {
             createUser({name, password, confirmPassword, contact})
             setContact("")
             setConfirmPassword("")
-            router.push('/loginPage')
+            router.push('/settingUp')
         }
   
 
